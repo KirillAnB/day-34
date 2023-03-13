@@ -1,18 +1,11 @@
 from question_model import Question
 from data import question_data
 from quiz_brain import QuizBrain
-import requests
 
 
-response = requests.get(url="https://opentdb.com/api.php?amount=10&type=boolean")
-data = response.json()
-questions_dict = {}
-print(data)
-# for item in data['results']:
-#     questions_dict[item['question']]=item['correct_answer']
-# print(questions_dict)
-questions_dict = {item['question']:item['correct_answer'] for item in data['results']}
-print(questions_dict)
+
+
+
 
 
 question_bank = []
