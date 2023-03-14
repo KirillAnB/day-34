@@ -4,16 +4,13 @@ from quiz_brain import *
 THEME_COLOR = "#375362"
 
 class UI():
-    SCORE_CORRECT = 0
-    SCORE_WRONG = 0
-    SCORE_TEXT = f"Score {SCORE_CORRECT}/{SCORE_WRONG}"
     def __init__(self,quiz_game: QuizBrain):
         self.quiz = quiz_game
         self.quiz_window = tkinter.Tk()
         self.quiz_window.title("Quiz game")
         self.quiz_window.config(bg=THEME_COLOR, padx=20, pady=20)
 
-        self.score_label = tkinter.Label(text=UI.SCORE_TEXT, fg="white", bg=THEME_COLOR)
+        self.score_label = tkinter.Label(text=f"Score {self.quiz.score}", fg="white", bg=THEME_COLOR)
         self.score_label.grid(row=0,column=1)
 
         self.quiz_canvas = tkinter.Canvas(width=300, height=250, bg='white')
@@ -43,8 +40,14 @@ class UI():
 
     def get_next_question(self):
         self.quiz_canvas.config(bg="white")
-        q_text = self.quiz.next_question()
-        self.quiz_canvas.itemconfig(self.question_text, text=q_text)
+        if self.quiz.still_has_questions():
+            self.score_label.config(text=f"Score {self.quiz.score}")
+            q_text = self.quiz.next_question()
+            self.quiz_canvas.itemconfig(self.question_text, text=q_text)
+        else:
+            self.quiz_canvas.itemconfig(self.question_text, text="There are no more questions")
+            self.correct_button.config(state='disable')
+            self.wrong_button.config(state='disable')
     def user_answer_true(self):
         is_true = self.quiz.check_answer(user_answer='True')
         self.feedback(is_true)
